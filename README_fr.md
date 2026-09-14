@@ -21,9 +21,6 @@
 
 ---
 
-<!-- PLACEHOLDER: capture principale, la vue Issues après un scan avec un problème sélectionné et son explication visible -->
-<img src="docs/images/Hero.png" alt="Vue Issues de Multiplayer Replication Lint" width="100%"/>
-
 ## Pourquoi ce plugin
 
 Les bugs de réplication font rarement crasher quoi que ce soit. Une variable n'arrive jamais chez les
@@ -65,9 +62,6 @@ Vérifiez dans **Edit → Plugins** que *Multiplayer Replication Lint* est bien 
 
 **Tools → Multiplayer Replication Lint**. La fenêtre est un onglet d'éditeur classique, vous pouvez la docker où vous
 voulez.
-
-<!-- PLACEHOLDER: capture du menu Tools avec l'entrée mise en évidence -->
-<img src="docs/images/ToolsMenu.png" alt="Entrée du menu Tools" width="50%"/>
 
 ### 3. Lui indiquer votre C++ (optionnel)
 
