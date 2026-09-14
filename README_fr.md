@@ -114,8 +114,6 @@ L'état du projet en un coup d'œil.
 - **Depuis le dernier scan** : ce qui est nouveau et ce qui a été corrigé
 - **Les 5 principaux problèmes**, chacun avec un bouton Open
 
-Avant le premier scan, il affiche un guide en trois étapes.
-
 <!-- PLACEHOLDER: capture du Dashboard avec quelques scans d'historique -->
 <img src="docs/images/Dashboard.png" alt="Dashboard" width="90%"/>
 
