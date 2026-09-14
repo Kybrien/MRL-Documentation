@@ -26,13 +26,13 @@
 
 ## Pourquoi ce plugin
 
-La plupart des bugs de réplication ne font pas crasher le jeu. Une variable qui n'arrive jamais chez
-les clients, un RPC perdu parce que l'acteur ne réplique pas, un appel reliable envoyé à chaque frame
-qui finit par déconnecter un joueur. Tout marche sur votre machine, et tout casse à la première vraie
-session.
+Les bugs de réplication font rarement crasher quoi que ce soit. Une variable n'arrive jamais chez les
+clients et ils gardent la valeur du spawn. Un RPC part dans le vide parce que l'acteur ne réplique pas.
+Un appel reliable part à chaque frame jusqu'à ce que le serveur éjecte le joueur. Sur votre machine
+tout marche, et tout casse à la première vraie session.
 
-Unreal propose déjà d'excellents outils pour **mesurer** une session en cours. Aucun ne lit votre
-projet pour vous dire ce qui est **faux** avant d'appuyer sur Play.
+Unreal a de bons outils pour mesurer une session déjà en cours. Aucun ne lit votre projet pour vous
+dire ce qui est faux avant d'appuyer sur Play.
 
 |  | Multiplayer Replication Lint | Network Profiler / Networking Insights |
 |---|:---:|:---:|
@@ -44,8 +44,8 @@ projet pour vous dire ce qui est **faux** avant d'appuyer sur Play.
 | **Reproduit de mauvaises conditions réseau à la demande** | Oui | Non |
 | **Mesure les octets qu'une session envoie réellement** | Non | Oui |
 
-> Les deux se complètent. Multiplayer Replication Lint attrape les erreurs de configuration, le profiler vous dit ce que
-> votre jeu coûte vraiment sur le réseau. Utilisez les deux.
+> Utilisez les deux. Multiplayer Replication Lint attrape les erreurs de configuration, et le profiler
+> vous dit ce que votre jeu coûte sur le réseau une fois qu'il tourne.
 
 *Dans cette documentation, les boutons et les menus sont nommés en anglais. Si votre éditeur est en
 français, l'interface du plugin les affiche en français.*
@@ -96,8 +96,9 @@ module de jeu (par exemple `MyGame`).
 6. Cliquez sur **Open** pour ouvrir le Blueprint, ou sur **Fix** quand le bouton est là
 7. Sauvegardez, relancez le scan, regardez la note monter
 
-**Votre premier scan ne sera pas vide, même dans un projet vierge.** Le plugin contient quatre acteurs
-C++ de démonstration, dont trois volontairement cassés, pour voir de vrais résultats tout de suite.
+Sur un projet propre, le premier scan peut très bien revenir vide, et c'est la réponse que vous
+voulez. Pour voir ce que l'outil détecte, cliquez sur **Run Demo Audit** : il scanne quatre acteurs C++
+cassés exprès, une seule fois, sans les mélanger à vos propres résultats.
 
 <!-- PLACEHOLDER: courte vidéo GIF, Run Full Scan puis la note qui apparaît sur le Dashboard -->
 <img src="docs/images/FirstScan.gif" alt="Premier scan" width="90%"/>
@@ -119,14 +120,14 @@ L'état du projet en un coup d'œil.
 - **Depuis le dernier scan** : ce qui est nouveau et ce qui a été corrigé
 - **Les 5 principaux problèmes**, chacun avec un bouton Open
 
-Avant le premier scan, il affiche un guide en trois étapes au lieu d'une page vide.
+Avant le premier scan, il affiche un guide en trois étapes.
 
 <!-- PLACEHOLDER: capture du Dashboard avec quelques scans d'historique -->
 <img src="docs/images/Dashboard.png" alt="Dashboard" width="90%"/>
 
 ### Issues
 
-Le cœur du travail. Tous les problèmes dans un seul tableau triable.
+Tous les problèmes dans un seul tableau triable. C'est là que vous passerez votre temps.
 
 - **Filtrez** par texte, sévérité et catégorie. Cochez *Show ignored* pour revoir ce que vous avez
   écarté
@@ -402,9 +403,9 @@ L'explication complète de chaque règle, y compris les cas où elle a tort, se 
 
 ### Comment la note est calculée
 
-Seuls les problèmes **confirmés** comptent, c'est-à-dire de confiance Definite ou High. Les
-heuristiques apparaissent sous **Needs review** et ne font jamais bouger la note, sauf si vous cochez
-*Potential Findings Affect Grade*.
+Seuls les problèmes confirmés comptent, c'est-à-dire de confiance Definite ou High. Les heuristiques
+apparaissent sous **Needs review** sur le Dashboard et ne font jamais bouger la note, sauf si vous
+cochez *Potential Findings Affect Grade*.
 
 | Note | Quand |
 |:---:|---|
@@ -651,8 +652,9 @@ l'équipe les partage donc via le contrôle de source.
 | **Large RPC Payload Bytes** | 256 | `RL_RPC_005` |
 | **Max RPC Parameters** | 6 | `RL_RPC_007` |
 
-Un shooter compétitif peut légitimement monter les pawns des joueurs au-dessus de 100 Hz. Adaptez ces
-seuils à votre jeu plutôt que d'ignorer les problèmes un par un.
+Un shooter compétitif peut légitimement monter les pawns des joueurs au-dessus de 100 Hz. Si une règle
+se déclenche sans arrêt sur un choix volontaire, déplacez le seuil ici et elle se tait partout d'un
+coup.
 
 </details>
 
@@ -665,6 +667,7 @@ seuils à votre jeu plutôt que d'ignorer les problèmes un par un.
 |---|:---:|---|
 | **Disabled Rules** | *vide* | Identifiants des règles qui ne signalent plus rien. Pareil que les décocher dans la vue Rules. |
 | **Enable Experimental Diagnostics** | ✅ | Interrupteur général de toutes les règles expérimentales. |
+| **Potential Findings Affect Grade** | ❌ | Laisse les heuristiques bouger la note. Désactivé, pour qu'une règle qui admet ne rien pouvoir prouver ne fasse pas baisser votre score. |
 | **Severity Overrides** | *vide* | Signaler une règle à la sévérité choisie par votre équipe. |
 | **Ignored Diagnostic Ids** | *vide* | Rempli par le bouton Ignore. Modifiable à la main sans risque. |
 | **Ignore Reasons** | *vide* | Une note facultative par problème ignoré. Six mois plus tard, *pourquoi c'est masqué ?* est une vraie question. |
@@ -678,7 +681,8 @@ seuils à votre jeu plutôt que d'ignorer les problèmes un par un.
 
 | Réglage | Par défaut | Rôle |
 |---|:---:|---|
-| **Native Modules To Scan** | `ReplicationLintDemo` | Modules C++ à scanner en plus des Blueprints. |
+| **Native Modules To Scan** | *vide* | Modules C++ à scanner en plus des Blueprints. |
+| **Scan Bundled Demo Actors** | ❌ | Garde les acteurs de démonstration cassés dans tous les scans. Désactivé par défaut. |
 | **Ignored Content Folders** | *vide* | Dossiers à ignorer complètement, par exemple `/Game/ThirdParty`. |
 | **Ignored Class Names** | *vide* | Classes à ignorer, nom sans préfixe. |
 
@@ -715,9 +719,8 @@ cassés exprès et un propre qui sert de référence. Ils ne sont jamais scanné
 d'exemple cassé volontairement n'a rien à faire dans vos résultats. Cliquez sur **Run Demo Audit**
 pour les scanner une fois.
 
-**Il lit ce qui est dans l'éditeur, pas seulement ce qui est sauvegardé.** Un Blueprint modifié mais
-pas encore sauvegardé est scanné avec vos modifications. C'est pour ça qu'un problème disparaît juste
-après une correction, avant même de sauvegarder.
+**Il lit la version qu'a l'éditeur d'un Blueprint, modifications non sauvegardées comprises.** C'est
+pour ça qu'un problème disparaît juste après une correction, avant même de sauvegarder.
 
 **Les scans suivants sont rapides.** Les Blueprints dont le fichier n'a pas changé ne sont pas
 rechargés, leurs résultats viennent d'un cache dans `Saved/ReplicationLint/Cache/`. Le cache se

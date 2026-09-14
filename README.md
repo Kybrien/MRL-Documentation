@@ -26,12 +26,13 @@
 
 ## Why this plugin
 
-Most replication bugs are not crashes. A variable that never reaches clients, an RPC dropped because
-the actor does not replicate, a reliable call fired every frame that ends up kicking a player. The game
-runs fine on your machine, and breaks in the first real session.
+Replication bugs rarely crash anything. A variable never reaches clients and they keep the spawn-time
+value. An RPC goes nowhere because the actor does not replicate. A reliable call fires every frame
+until the server drops the player. On your machine the game runs fine, and it breaks in the first real
+session.
 
-Unreal already gives you great tools to **measure** a running session. None of them reads your project
-and tells you what is **wrong** before you press Play.
+Unreal has good tools for measuring a session that is already running. None of them reads your project
+and tells you what is wrong before you press Play.
 
 |  | Multiplayer Replication Lint | Network Profiler / Networking Insights |
 |---|:---:|:---:|
@@ -43,8 +44,8 @@ and tells you what is **wrong** before you press Play.
 | **Reproduces bad network conditions on demand** | Yes | No |
 | **Measures the bytes a running session actually sends** | No | Yes |
 
-> The two are complementary. Multiplayer Replication Lint catches the setup mistakes, the profiler tells you what your
-> game actually costs on the wire. Use both.
+> Use both. Multiplayer Replication Lint catches the setup mistakes, and the profiler tells you what
+> your game costs on the wire once it runs.
 
 ---
 
@@ -90,8 +91,9 @@ name (for example `MyGame`).
 6. Click **Open** to jump into the Blueprint, or **Fix** when the button is there
 7. Save, scan again, watch the grade climb
 
-**Your first scan will not be empty, even in a blank project.** The plugin ships four C++ demo actors,
-three of them broken on purpose, so you can see real findings straight away.
+On a clean project the first scan may well come back empty, which is the answer you want. To see what
+the tool detects, click **Run Demo Audit**: it scans four C++ demo actors that are broken on purpose,
+once, without mixing them into your own results.
 
 <!-- PLACEHOLDER: short GIF, Run Full Scan then the grade appearing on the Dashboard -->
 <img src="docs/images/FirstScan.gif" alt="First scan" width="90%"/>
@@ -112,14 +114,14 @@ Project health at a glance.
 - **Since last scan**: what is new and what got fixed
 - **Top 5 issues**, each with an Open button
 
-Before the first scan it shows a three step guide instead of an empty page.
+Before the first scan it shows a three step guide.
 
 <!-- PLACEHOLDER: Dashboard screenshot with a few scans of history -->
 <img src="docs/images/Dashboard.png" alt="Dashboard" width="90%"/>
 
 ### Issues
 
-The heart of the workflow. Every finding in one sortable table.
+Every finding in one sortable table. This is where you will spend your time.
 
 - **Filter** by text, severity and category. Tick *Show ignored* to see what you dismissed
 - **Select a row** to read the explanation: *what was detected*, *the risk in a real game*,
@@ -387,8 +389,8 @@ inside the editor.
 
 ### How the grade is computed
 
-Only **confirmed** findings count, meaning confidence Definite or High. Heuristics are listed under
-**Needs review** and never move the grade, unless you tick *Potential Findings Affect Grade*.
+Only confirmed findings count, meaning confidence Definite or High. Heuristics appear under **Needs
+review** on the Dashboard and never move the grade, unless you tick *Potential Findings Affect Grade*.
 
 | Grade | When |
 |:---:|---|
@@ -625,8 +627,8 @@ team shares them through source control.
 | **Large RPC Payload Bytes** | 256 | `RL_RPC_005` |
 | **Max RPC Parameters** | 6 | `RL_RPC_007` |
 
-A competitive shooter legitimately pushes player pawns above 100 Hz. Tune these to your game rather
-than ignoring findings one by one.
+A competitive shooter legitimately pushes player pawns above 100 Hz. If a rule keeps firing on a
+deliberate choice, move the threshold here and it stops firing everywhere at once.
 
 </details>
 
@@ -639,6 +641,7 @@ than ignoring findings one by one.
 |---|:---:|---|
 | **Disabled Rules** | *empty* | Rule IDs that never report. Same as unticking them in the Rules view. |
 | **Enable Experimental Diagnostics** | ✅ | Master switch for every experimental rule. |
+| **Potential Findings Affect Grade** | ❌ | Lets heuristics move the grade. Off, so a rule that admits it cannot prove what it found cannot lower your score. |
 | **Severity Overrides** | *empty* | Report a rule at the severity your team agreed on. |
 | **Ignored Diagnostic Ids** | *empty* | Filled by the Ignore button. Safe to edit by hand. |
 | **Ignore Reasons** | *empty* | Optional note per ignored finding. Six months later, *why is this suppressed?* is a real question. |
@@ -652,7 +655,8 @@ than ignoring findings one by one.
 
 | Setting | Default | Purpose |
 |---|:---:|---|
-| **Native Modules To Scan** | `ReplicationLintDemo` | C++ modules to scan on top of Blueprints. |
+| **Native Modules To Scan** | *empty* | C++ modules to scan on top of Blueprints. |
+| **Scan Bundled Demo Actors** | ❌ | Keeps the deliberately broken demo actors in every scan. Off by default. |
 | **Ignored Content Folders** | *empty* | Folders to skip entirely, for example `/Game/ThirdParty`. |
 | **Ignored Class Names** | *empty* | Classes to skip, name without prefix. |
 
@@ -688,9 +692,8 @@ compiled into a packaged build.
 one clean reference. They are never scanned by default: sample content that is broken on purpose has
 no business putting Critical findings into your project. Click **Run Demo Audit** to scan them once.
 
-**It reads what is in the editor, not only what is saved.** A Blueprint you changed and did not save
-yet is scanned with your changes. That is why a finding disappears right after a fix, before you
-save.
+**It reads the editor's version of a Blueprint, including unsaved changes.** That is why a finding
+disappears right after a fix, before you save.
 
 **Repeated scans are fast.** Blueprints whose file did not change are not reloaded, their results come
 from a cache in `Saved/ReplicationLint/Cache/`. The cache throws itself away when you change a
