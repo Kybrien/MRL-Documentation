@@ -108,8 +108,6 @@ Project health at a glance.
 - **Since last scan**: what is new and what got fixed
 - **Top 5 issues**, each with an Open button
 
-Before the first scan it shows a three step guide.
-
 <!-- PLACEHOLDER: Dashboard screenshot with a few scans of history -->
 <img src="docs/images/Dashboard.png" alt="Dashboard" width="90%"/>
 
