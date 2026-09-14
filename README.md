@@ -21,9 +21,6 @@
 
 ---
 
-<!-- PLACEHOLDER: hero screenshot, the Issues view after a scan with a finding selected and its explanation visible -->
-<img src="docs/images/Hero.png" alt="Multiplayer Replication Lint Issues view" width="100%"/>
-
 ## Why this plugin
 
 Replication bugs rarely crash anything. A variable never reaches clients and they keep the spawn-time
@@ -61,9 +58,6 @@ Check **Edit → Plugins** that *Multiplayer Replication Lint* is enabled.
 ### 2. Open the tool
 
 **Tools → Multiplayer Replication Lint**. The window is a normal editor tab, dock it wherever you like.
-
-<!-- PLACEHOLDER: screenshot of the Tools menu with the entry highlighted -->
-<img src="docs/images/ToolsMenu.png" alt="Tools menu entry" width="50%"/>
 
 ### 3. Tell it about your C++ (optional)
 
