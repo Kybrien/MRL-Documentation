@@ -41,7 +41,8 @@ projet pour vous dire ce qui est **faux** avant d'appuyer sur Play.
 | **Explique pourquoi ça casse et comment corriger** | Oui | Non |
 | **Correction en un clic des erreurs de configuration** | Oui | Non |
 | **Fait échouer un build CI sur un nouveau problème critique** | Oui | Non |
-| **Mesure la vraie bande passante d'une session** | Non | Oui |
+| **Reproduit de mauvaises conditions réseau à la demande** | Oui | Non |
+| **Mesure les octets qu'une session envoie réellement** | Non | Oui |
 
 > Les deux se complètent. Multiplayer Replication Lint attrape les erreurs de configuration, le profiler vous dit ce que
 > votre jeu coûte vraiment sur le réseau. Utilisez les deux.
@@ -201,6 +202,12 @@ Testez votre jeu dans de vraies conditions réseau, en un clic.
 
 Le ping indiqué est celui que `stat net` devrait afficher, pas un délai par paquet. L'émulation tourne
 sur le serveur, donc tous les clients ont les mêmes conditions.
+
+> [!NOTE]
+> **Le Lag Lab crée des conditions, il ne mesure rien.** Il configure l'émulation réseau du PIE à votre
+> place, pour qu'un test réaliste tienne en un clic au lieu de six champs dans les Editor Preferences.
+> La mesure reste le travail de `stat net` ou de Networking Insights, et c'est pour ça que le tableau
+> en haut de cette page dit que le plugin ne mesure pas la bande passante.
 
 > [!TIP]
 > **Le preset asymétrique est le plus intéressant.** Le téléchargement est rapide, l'envoi est lent et
@@ -797,7 +804,8 @@ nombre d'acteurs placés qu'il a mis à jour. Le commandlet de CI affiche son r�
 | Multiplayer Replication Lint fait | Multiplayer Replication Lint ne fait pas |
 |---|---|
 | Lire vos classes et vos graphes Blueprint | Observer une session en direct |
-| Signaler ce qui ne peut pas marcher ou coûtera trop cher | Mesurer la vraie bande passante |
+| Mettre en place les conditions réseau de votre test | Mesurer les octets envoyés par cette session |
+| Signaler ce qui ne peut pas marcher ou coûtera trop cher | Dire ce que votre jeu coûte sur le réseau |
 | Expliquer chaque problème et comment le corriger | Réécrire la logique de votre jeu |
 | Corriger les erreurs de configuration en un clic | Toucher aux graphes ou au C++ |
 | Faire échouer un build sur un nouveau problème critique | Remplacer des tests avec de vrais joueurs |

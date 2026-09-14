@@ -40,7 +40,8 @@ and tells you what is **wrong** before you press Play.
 | **Explains why it breaks and how to fix it** | Yes | No |
 | **One click fix for configuration mistakes** | Yes | No |
 | **Fails a CI build on a new critical issue** | Yes | No |
-| **Measures real bandwidth in a live session** | No | Yes |
+| **Reproduces bad network conditions on demand** | Yes | No |
+| **Measures the bytes a running session actually sends** | No | Yes |
 
 > The two are complementary. Multiplayer Replication Lint catches the setup mistakes, the profiler tells you what your
 > game actually costs on the wire. Use both.
@@ -192,6 +193,12 @@ Test your game under real network conditions in one click.
 
 The ping is what `stat net` should show, not a per packet delay. The emulation runs on the server, so
 every client gets the same conditions.
+
+> [!NOTE]
+> **The Lag Lab creates conditions, it does not measure anything.** It configures Unreal's PIE network
+> emulation for you so a realistic test is one click instead of six fields in Editor Preferences. The
+> measuring is still done by `stat net` or Networking Insights, which is why the comparison at the top
+> of this page says this plugin does not measure bandwidth.
 
 > [!TIP]
 > **The asymmetric preset is the interesting one.** Downloads are fast, uploads are slow and lossy,
@@ -767,7 +774,8 @@ gate that did not pass.
 | Multiplayer Replication Lint does | Multiplayer Replication Lint does not |
 |---|---|
 | Read your classes and Blueprint graphs | Watch a live session |
-| Flag setups that cannot work or will cost too much | Measure real bandwidth |
+| Set up the network conditions you want to test under | Measure the bytes that session sends |
+| Flag setups that cannot work or will cost too much | Tell you what your game costs on the wire |
 | Explain every finding and how to fix it | Rewrite your game logic |
 | Fix configuration mistakes in one click | Touch graphs or C++ |
 | Fail a build on new critical issues | Replace testing with real players |
